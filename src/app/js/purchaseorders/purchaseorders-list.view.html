@@ -1,0 +1,213 @@
+<style type="text/css" scoped>
+    .page-head .page-tags .tag-1:before {
+        background-color: #f15a22;
+        content: "1";
+    }
+
+    .page-content .list-item.tag-1 {
+        border-left: 5px solid #f15a22;
+    }
+
+    .page-head .page-tags .tag-2:before {
+        background-color: #4499df;
+        content: "2";
+    }
+
+    .page-content .list-item.tag-2 {
+        border-left: 5px solid #4499df;
+    }
+</style>
+
+<div id="loading-screen" class="overlay ng-scope" ng-if="controller.isLoading">
+    <img src="assets/img/loading.gif">
+    <p class="text-center text-muted ng-binding">{{:: 'loading' | i18n : [] : 'dts/mpd'}}</p>
+</div>
+
+<totvs-page type="list">
+
+    <totvs-page-navbar>
+
+        <totvs-page-breadcrumb>
+            <breadcrumb link="#/dashboard">
+                <span class="hidden-xs">{{ ::'l-home' | i18n : [] : 'js/purchaseorders' }}</span>
+                <span class="glyphicon glyphicon-home hidden-sm hidden-md hidden-lg"></span>
+            </breadcrumb>
+            <breadcrumb>
+                <span>{{ ::'l-purchaseorder' | i18n : [] : 'js/purchaseorders' }}</span>
+            </breadcrumb>
+        </totvs-page-breadcrumb>
+
+        <totvs-page-header>
+
+            <totvs-page-header-title
+                title="{{ ::'l-purchaseorders' | i18n : [] : 'js/purchaseorders' }}"
+                total="{{ controller.recordsCount }}">
+            </totvs-page-header-title>
+
+            <totvs-page-header-operation>
+
+                <totvs-page-header-operation-action
+                    limit-primary-action="3"
+                    items="controller.records"
+                    items-as="purchaseorder">
+                    <action link="#/purchaseorders/new" icon="glyphicon-plus">
+                        {{ ::'btn-add' | i18n }} {{ ::'l-order' | i18n : [] : 'js/purchaseorders' }}
+                    </action>
+                </totvs-page-header-operation-action>
+
+                <totvs-page-header-operation-filter
+                    placeholder="{{ ::'l-search' | i18n }}"
+                    ng-submit="controller.search()"
+                    ng-model="controller.searchText"
+                    advanced-search="controller.openAdvancedSearch">
+                </totvs-page-header-operation-filter>
+
+            </totvs-page-header-operation>
+
+            <totvs-page-tags>
+                <tag class="tag-1">Emergencial</tag>
+                <tag class="tag-2">Normal</tag>
+            </totvs-page-tags>
+
+            <totvs-page-disclaimers
+                disclaimer-list="controller.disclaimers"
+                ng-click="controller.removeDisclaimer">
+            </totvs-page-disclaimers>
+
+        </totvs-page-header>
+
+    </totvs-page-navbar>
+
+    <totvs-page-content>
+
+        <totvs-page-alert
+            ng-if="controller.recordsCount === 0"
+            type="info"
+            message="{{ ::'l-msg-not-found' | i18n }}">
+        </totvs-page-alert>
+
+        <totvs-list-item
+            ng-repeat="purchaseorder in controller.records track by purchaseorder.id"
+            ng-class="purchaseorder.urgencia === 'Emergencial' ?  'tag-1' : 'tag-2'">
+
+            <totvs-list-item-header>
+                <totvs-list-item-title
+                    title="{{ ::'l-order' | i18n : [] : 'js/purchaseorders' }} {{ ::purchaseorder.pedido }}"
+                    link="#/purchaseorders/detail/{{ ::purchaseorder.id }}">
+                </totvs-list-item-title>
+
+                <!-- TODO: Implementar botões -->
+
+                <totvs-list-item-action
+                    limit-primary-action="2"
+                    class="col-xs-3">
+                    <action link="#/purchaseorders/edit/{{ ::purchaseorder.id }}" icon="glyphicon-pencil">
+                        {{ ::'btn-edit' | i18n }}
+                    </action>
+                    <action ng-click="controller.onRemove(purchaseorder)" icon="glyphicon-trash">
+                        {{ ::'btn-remove' | i18n }}
+                    </action>
+                    <action>
+                        {{ ::'btn-follow-up' | i18n }}
+                    </action>
+                    <action>
+                        {{ ::'btn-copy-order' | i18n }}
+                    </action>
+                    <action>
+                        {{ ::'btn-transfer-order' | i18n }}
+                    </action>
+                </totvs-list-item-action>
+            </totvs-list-item-header>
+
+            <totvs-list-item-content>
+                <totvs-list-item-info
+                    title="{{ ::'l-total-value' | i18n : [] : 'js/purchaseorders' }}"
+                    value="{{ ::purchaseorder.valorTotal | mask:'R$ 999.999.999,99' }}">
+                </totvs-list-item-info>
+
+                <totvs-list-item-info
+                    title="{{ ::'l-open-value' | i18n : [] : 'js/purchaseorders' }}"
+                    value="{{ ::purchaseorder.valorAberto | mask:'R$ 999.999.999,99' }}">
+                </totvs-list-item-info>
+
+                <totvs-list-item-info
+                    title="{{ ::'l-print-status' | i18n : [] : 'js/purchaseorders'}}"
+                    value="{{ ::purchaseorder.statusImpressao }}">
+                </totvs-list-item-info>
+
+                <totvs-list-item-info
+                    title="{{ ::'l-nature' | i18n : [] : 'js/purchaseorders' }}"
+                    value="{{ ::purchaseorder.natureza }}">
+                </totvs-list-item-info>
+
+                <totvs-list-item-info
+                    title="Data de Emissão"
+                    value="{{ ::purchaseorder.dataEmissao | date:'dd/MM/yyyy' }}">
+                </totvs-list-item-info>
+
+
+                <totvs-list-item-info
+                    title="{{ ::'l-establishment' | i18n : [] : 'js/purchaseorders' }}"
+                    value="{{ ::purchaseorder.estabelecimentoEntrega_id }}">
+                </totvs-list-item-info>
+
+            </totvs-list-item-content>
+
+            <totvs-list-item-content-detail>
+                <totvs-list-item-info title="{{ ::'l-provider' | i18n : [] : 'js/purchaseorders' }}">
+                    <totvs-editable
+                        value="{{ ::purchaseorder.fornecedor_id }}"
+                        on-complete="controller.applyEdit(editable.newValue, 'fornecedor_id', purchaseorder)">
+                        <totvs-field
+                            totvs-email
+                            class="col-md-12"
+                            ng-model="purchaseorder.fornecedor_id"
+                            canclean
+                            label="{{ ::'l-provider' | i18n : [] : 'js/purchaseorders' }}">
+                        </totvs-field>
+                    </totvs-editable>
+                </totvs-list-item-info>
+
+                <totvs-list-item-info title="{{ ::'l-short-name' | i18n : [] : 'js/purchaseorders' }}">
+                    <totvs-editable
+                        value="{{ ::purchaseorder.nomeAbreviado }}"
+                        on-complete="controller.applyEdit(editable.newValue, 'nomeAbreviado', purchaseorder)">
+                        <totvs-field
+                            totvs-phone
+                            class="col-md-12"
+                            ng-model="purchaseorder.nomeAbreviado"
+                            canclean
+                            label="{{ ::'l-short-name' | i18n : [] : 'js/purchaseorders' }}">
+                        </totvs-field>
+                    </totvs-editable>
+                </totvs-list-item-info>
+
+                <totvs-list-item-info title="{{ ::'l-name' | i18n : [] : 'js/purchaseorders' }}">
+                    <totvs-editable
+                        value="{{ ::purchaseorder.nomeFornecedor }}"
+                        on-complete="controller.applyEdit(editable.newValue, 'nomeFornecedor', purchaseorder)">
+                        <totvs-field
+                            totvs-phone
+                            class="col-md-12"
+                            ng-model="purchaseorder.nomeFornecedor"
+                            canclean
+                            label="{{ ::'l-name' | i18n : [] : 'js/purchaseorders' }}">
+                        </totvs-field>
+                    </totvs-editable>
+                </totvs-list-item-info>
+
+                <totvs-list-item-info
+                    title="{{ ::'l-doc-cnpj' | i18n : [] : 'js/purchaseorders' }}"
+                    value="{{ ::purchaseorder.cnpj | mask:'99.999.999/9999-99' }}">
+                </totvs-list-item-info>
+            </totvs-list-item-content-detail>
+        </totvs-list-item>
+
+        <totvs-list-pagination
+            ng-if="controller.records.length < controller.recordsCount && controller.records.length"
+            ng-click="controller.loadRecords(true)">
+        </totvs-list-pagination>
+
+    </totvs-page-content>
+
+</totvs-page>

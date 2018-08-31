@@ -1,0 +1,380 @@
+<totvs-page type="edit">
+
+    <div id="loading-screen" class="overlay ng-scope" ng-if="controller.isLoading">
+        <img src="assets/img/loading.gif">
+        <p class="text-center text-muted ng-binding">{{:: 'loading' | i18n : [] : 'dts/mpd'}}</p>
+    </div>
+
+	<totvs-page-navbar>
+
+        <!-- Alterando Pedido -->
+        <totvs-page-breadcrumb ng-if="controller.isUpdate">
+            <breadcrumb link="#/dashboard">
+                <span class="hidden-xs">{{ ::'l-home' | i18n : [] : 'js/purchaseorders' }}</span>
+                <span class="glyphicon glyphicon-home hidden-sm hidden-md hidden-lg"></span>
+            </breadcrumb>
+            <breadcrumb link="#/purchaseorders">
+                <span>{{ ::'l-purchaseorders' | i18n : [] : 'js/purchaseorders' }}</span>
+            </breadcrumb>
+
+            <breadcrumb>
+                <span>{{ ::'l-edit-purchaseorder' | i18n : [] : 'js/purchaseorders' }}</span>
+            </breadcrumb>
+        </totvs-page-breadcrumb>
+
+        <!-- Novo Pedido -->
+		<totvs-page-breadcrumb ng-if="!controller.isUpdate">
+            <breadcrumb link="#/dashboard">
+                <span class="hidden-xs">{{ ::'l-home' | i18n : [] : 'js/purchaseorders' }}</span>
+                <span class="glyphicon glyphicon-home hidden-sm hidden-md hidden-lg"></span>
+            </breadcrumb>
+            <breadcrumb link="#/purchaseorders">
+                <span>{{ ::'l-purchaseorders' | i18n : [] : 'js/purchaseorders' }}</span>
+            </breadcrumb>
+
+            <breadcrumb>
+                <span>{{ ::'l-new-purchaseorder' | i18n : [] : 'js/purchaseorders' }}</span>
+            </breadcrumb>
+		</totvs-page-breadcrumb>
+
+		<totvs-page-header>
+            <!-- Alterando Pedido -->
+            <totvs-page-header-title ng-if="controller.isUpdate"
+                title="{{ ::'l-edit-purchaseorder' | i18n : [] : 'js/purchaseorders' }} {{ controller.purchaseorder.pedido }}">
+            </totvs-page-header-title>
+
+            <!-- Novo Pedido -->
+            <totvs-page-header-title ng-if="!controller.isUpdate"
+                title="{{ ::'l-new-purchaseorder' | i18n : [] : 'js/purchaseorders' }}">
+			</totvs-page-header-title>
+
+			<totvs-page-header-operation>
+				<totvs-page-header-operation-action hide-save-new="{{controller.isUpdate}}">
+                </totvs-page-header-operation-action>
+			</totvs-page-header-operation>
+		</totvs-page-header>
+
+	</totvs-page-navbar>
+
+	<totvs-page-content>
+
+        <totvs-page-form t-name="frmPurchaseOrders">
+
+            <fieldset>
+
+                <totvs-row>
+                    <totvs-field
+						totvs-combo
+						class="col-lg-2 col-md-2 col-sm-2 col-xs-12"
+						ng-model="controller.purchaseorder.urgencia"
+						ng-required="true"
+						canclean
+                        label="{{ ::'l-urgency' | i18n : [] : 'js/purchaseorders' }}"
+                        t-options="controller.urgenciaOptions"
+                        focus>
+						<validator key="required">Este campo é obrigatório.</validator>
+                    </totvs-field>
+                </totvs-row>
+
+                <totvs-row>
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="{{'l-payment-conditions' | i18n: []: 'js/purchaseorders'}}"
+                        ng-model="controller.purchaseorder.condicaoPagamento_id"
+                        select-id="id"
+                        select-description="descricao"
+                        t-no-data="Sem dados"
+                        select-service="zoomPaymentConditionsFactory"
+                        zoom-service="zoomPaymentConditionsFactory"
+                        canclean=""
+                        ng-required="true"
+                        t-field-sort="descricao">
+                    </totvs-field>
+
+                    <!-- TODO: implementar tela modal para selecionar forma específica -->
+                    <totvs-button
+                        style="margin-top: 35px;"
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        t-click="controller.onMyButton()"
+                        t-icon="glyphicon-calendar"
+                        t-label="Condição de Pagamento Específica"
+                        t-tooltip="{{ controller.tooltip }}">
+                    </totvs-button>
+                </totvs-row>
+
+                <totvs-row ng-if="! controller.isUpdate">
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="{{'l-provider' | i18n: []: 'js/purchaseorders'}}"
+                        placeholder="Selecione um valor"
+                        ng-model="controller.purchaseorder.fornecedor_id"
+                        select-id="id"
+                        select-description="nomeAbreviado"
+                        t-no-data="Sem dados"
+                        select-service="zoomProvidersFactory"
+                        zoom-service="zoomProvidersFactory"
+                        canclean=""
+                        ng-required="true"
+                        ng-change="controller.fornecedorChange()"
+                        t-field-sort="nomeAbreviado">
+                    </totvs-field>
+                </totvs-row>
+
+                <totvs-row>
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="Estabelecimento de Entrega"
+                        placeholder="Selecione um valor"
+                        ng-model="controller.purchaseorder.estabelecimentoEntrega_id"
+                        select-id="id"
+                        select-description="nome"
+                        t-no-data="Sem dados"
+                        select-service="zoomEstablishmentsFactory"
+                        zoom-service="zoomEstablishmentsFactory"
+                        canclean=""
+                        ng-required="true"
+                        t-field-sort="nome">
+                    </totvs-field>
+
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="Estabelecimento de Cobrança"
+                        placeholder="Selecione um valor"
+                        ng-model="controller.purchaseorder.estabelecimentoCobranca_id"
+                        select-id="id"
+                        select-description="nome"
+                        t-no-data="Sem dados"
+                        select-service="zoomEstablishmentsFactory"
+                        zoom-service="zoomEstablishmentsFactory"
+                        canclean=""
+                        ng-required="true"
+                        t-field-sort="nome">
+                    </totvs-field>
+                </totvs-row>
+
+                <totvs-row>
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="Emitentes de Entrega"
+                        placeholder="Selecione um valor"
+                        ng-model="controller.purchaseorder.emitenteEntrega_id"
+                        select-id="id"
+                        select-description="nomeAbreviado"
+                        t-no-data="Sem dados"
+                        select-service="zoomEmittersFactory"
+                        zoom-service="zoomEmittersFactory"
+                        canclean=""
+                        t-field-sort="nomeAbreviado">
+                    </totvs-field>
+
+                    <totvs-field
+                        totvs-select
+                        class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                        label="Estabelecimento Gestor"
+                        placeholder="Selecione um valor"
+                        ng-model="controller.purchaseorder.estabelecimentoGestor_id"
+                        select-id="id"
+                        select-description="nome"
+                        t-no-data="Sem dados"
+                        select-service="zoomEstablishmentsFactory"
+                        zoom-service="zoomEstablishmentsFactory"
+                        canclean=""
+                        t-field-sort="nome">
+                    </totvs-field>
+                </totvs-row>
+
+                <totvs-row>
+                    <totvs-field totvs-radio
+                        label="Natureza"
+                        t-options="controller._naturesOfOperation"
+                        ng-model="controller.purchaseorder.natureza"
+                        ng-init="controller.purchaseorder.natureza"
+                        ng-required="true">
+                    </totvs-field>
+                </totvs-row>
+
+                <div class="col-xs-12 text-right" style="margin-top: 15px;">
+                    <a class="clickable" ng-click="controller.onExpandAll()">{{ 'l-expand-contract-all' | i18n: []: 'js/purchaseorders' }}</a>
+                </div>
+
+                <accordion close-others="false" class="col-xs-12">
+
+                    <!-- Transporte -->
+                    <accordion-group is-open="controller.group.transport.open">
+
+                        <accordion-heading>
+                            {{ 'l-transport' | i18n: []:  'js/purchaseorders' }}
+                            <i class="pull-right glyphicon"
+                                ng-class="{'glyphicon-chevron-down' :  controller.group.transport.open,
+                                'glyphicon-chevron-right': !controller.group.transport.open}">
+                            </i>
+                        </accordion-heading>
+
+                        <totvs-row>
+                            <totvs-field
+                                totvs-select
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                                label="{{'l-transporter' | i18n: []: 'js/purchaseorders'}}"
+                                placeholder="Selecione um valor"
+                                ng-model="controller.purchaseorder.transportador_id"
+                                select-id="id"
+                                select-description="nomeAbreviado"
+                                t-no-data="Sem dados"
+                                select-service="zoomTransportersFactory"
+                                zoom-service="zoomTransportersFactory"
+                                canclean=""
+                                ng-required="true"
+                                t-field-sort="nomeAbreviado">
+                            </totvs-field>
+                        </totvs-row>
+
+                        <totvs-row>
+                            <field
+                                class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                                type="radio"
+                                ng-model="controller.purchaseorder.frete"
+                                ng-init="controller.purchaseorder.frete"
+                                label="Frete"
+                                ng-required="true">
+                                <totvs-options>
+                                    <totvs-option value="Pago">Pago</totvs-option>
+                                    <totvs-option value="A Pagar">A Pagar</totvs-option>
+                                </totvs-options>
+                            </field>
+
+                            <field
+                                class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                                type="radio"
+                                ng-model="controller.purchaseorder.viaTransporte"
+                                ng-init="controller.purchaseorder.viaTransporte"
+                                label="Via Transporte"
+                                ng-required="true">
+                                <totvs-options>
+                                    <totvs-option value="Rodoviário">Rodoviário</totvs-option>
+                                    <totvs-option value="Aeroviário">Aeroviário</totvs-option>
+                                    <totvs-option value="Marítmo">Marítmo</totvs-option>
+                                    <totvs-option value="Ferroviário">Ferroviário</totvs-option>
+                                    <totvs-option value="Rodoferroviário">Rodoferroviário</totvs-option>
+                                    <totvs-option value="Outros">Outros</totvs-option>
+                                </totvs-options>
+                            </field>
+                        </totvs-row>
+
+                    </accordion-group>
+
+                    <!-- Complemento -->
+                    <accordion-group is-open="controller.group.complement.open">
+
+                        <accordion-heading>
+                            {{ 'l-complement' | i18n: []:  'js/purchaseorders' }}
+                            <i class="pull-right glyphicon"
+                                ng-class="{'glyphicon-chevron-down' :  controller.group.complement.open,
+                                'glyphicon-chevron-right': !controller.group.complement.open}">
+                            </i>
+                        </accordion-heading>
+
+                        <totvs-row>
+                            <totvs-field
+                                totvs-select
+                                class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                                label="Mensagem"
+                                placeholder="Selecione um valor"
+                                ng-model="controller.purchaseorder.mensagem_id"
+                                select-id="id"
+                                select-description="descricao"
+                                t-no-data="Sem dados"
+                                select-service="zoomMessagesFactory"
+                                zoom-service="zoomMessagesFactory"
+                                canclean=""
+                                t-field-sort="descricao">
+                            </totvs-field>
+
+                            <totvs-field
+                                totvs-datepicker
+                                class="col-lg-2 col-md-2 col-sm-2 col-xs-12"
+                                label="{{ ::'l-date-emission' | i18n : [] : 'js/purchaseorders' }}"
+                                ng-model="controller.purchaseorder.dataEmissao"
+                                format="dd/MM/yyyy"
+                                t-mask-date="99/99/9999"
+                                output-format="date"
+                                t-min="controller.dataMinima"
+                                t-max="controller.dataMaxima"
+                                ng-blur="controller.validateDate(controller.purchaseorder.dataEmissao)"
+                                culture="pt"
+                                ng-required="true">
+                            </totvs-field>
+                        </totvs-row>
+
+                        <totvs-row>
+                            <totvs-field
+                                totvs-select
+                                class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                                label="Responsável"
+                                placeholder="Selecione um valor"
+                                ng-model="controller.purchaseorder.responsavel_id"
+                                select-id="id"
+                                select-description="nome"
+                                t-no-data="Sem dados"
+                                select-service="zoomBuyersFactory"
+                                zoom-service="zoomBuyersFactory"
+                                canclean=""
+                                ng-required="true"
+                                t-field-sort="nome">
+                            </totvs-field>
+
+                            <totvs-field
+                                class="col-lg-2 col-md-2 col-sm-2 col-xs-12"
+                                label="Imprime pedido"
+                                totvs-checkbox
+                                t-bsswitch
+                                label="label"
+                                ng-model="controller.purchaseorder.imprimePedido">
+                            </totvs-field>
+                            <i class="glyphicon glyphicon-info-sign blue hidden-xs col-lg-2 col-md-2 col-sm-2 col-xs-12"
+                                tooltip-placement="top"
+                                tooltip-html="controller.tooltipImprimePedido"
+                                style="margin-top: 35px; margin-left: -70px; color:dodgerblue;">
+                            </i>
+                        </totvs-row>
+
+                        <totvs-row>
+                            <totvs-field
+                                totvs-select
+                                class="col-lg-4 col-md-4 col-sm-4 col-xs-12"
+                                label="Pacote de compra"
+                                placeholder="Selecione um valor"
+                                ng-model="controller.purchaseorder.pacoteCompra_id"
+                                select-id="id"
+                                select-description="descricao"
+                                t-no-data="Sem dados"
+                                select-service="zoomPurchasePackageFactory"
+                                zoom-service="zoomPurchasePackageFactory"
+                                canclean=""
+                                t-field-sort="descricao">
+                            </totvs-field>
+                        </totvs-row>
+
+                        <totvs-row>
+                            <field
+                                type="textarea"
+                                ng-model="controller.purchaseorder.comentarios"
+                                label="Comentários">
+                            </field>
+                        </totvs-row>
+
+                    </accordion-group>
+
+                </accordion>
+
+			</fieldset>
+
+		</totvs-page-form>
+
+	</totvs-page-content>
+
+</totvs-page>

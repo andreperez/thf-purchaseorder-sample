@@ -1,0 +1,23 @@
+{
+    "name": "thf-purchaseorder-sample",
+    "description": "Projeto modelo de CRUD de Pedidos de Compra para THF",
+    "version": "0.1.0",
+    "private": true,
+    "license": "MIT License",
+    "homepage": "www.totvs.com",
+    "author": {
+        "name": "TOTVS S/A",
+        "url": "www.totvs.com"
+    },
+    "scripts": {
+        "init": "npm install",
+        "serve": "cd src/app && http-server -p 9090"
+    },
+    "dependencies": {
+        "gulp": "^3.9.1",
+        "gulp-webserver": "^0.9.1",
+        "jshint": "^2.9.6",
+        "bower": "^1.8.4"
+    },
+    "devDependencies": {}
+}
