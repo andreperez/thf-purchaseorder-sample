@@ -10,7 +10,7 @@ A API REST é fornecida pelo [JSON Server](https://github.com/typicode/json-serv
 
 Foram adicionados ao projeto o [gulp](https://github.com/gulpjs/gulp), [gulp-webserver](https://github.com/schickling/gulp-webserver) e [jshint](https://github.com/jshint/jshint).
 
-O gulp nesse caso inicia a aplicação web e monitora as mudanças em tempo real nos códigos-fontes, mostrando a página atualizada no browser (livereloading).
+O gulp nesse caso inicia a aplicação web e monitora as mudanças em tempo real nos códigos-fontes, mostrando a página atualizada no browser (live reloading).
 
 O JSHint monitora a qualidade e possíveis erros no código-fonte JavaScript.
 
@@ -90,7 +90,7 @@ Qualquer alteração salva no código-fonte é visualizada imediatamente no brow
 - [Gulp Web Server][4]
 - [JSHint][7]
 
-[1]: [https://github.com/totvs/generator-totvs-dev][2]
+[1]: [https://github.com/totvs/generator-totvs-dev]
 [2]: https://nodejs.org/en/
 [3]: https://github.com/gulpjs/gulp
 [4]: https://github.com/schickling/gulp-webserver
