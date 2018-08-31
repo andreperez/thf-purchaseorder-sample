@@ -36,7 +36,7 @@
 
             parameters._start = 0;
             parameters._limit = 1;
-            parameters.tabela = 'pacotesCompra';
+            parameters.tabela = 'pacotes';
 
             indexesFactory.findRecords(parameters, function (result) {
                 if (result) {
