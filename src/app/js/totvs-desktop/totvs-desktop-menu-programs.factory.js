@@ -44,7 +44,6 @@
 
                 applications.splice(0, 0,
                     new MenuApplication(999, 'Samples', [
-                        new Program('Sample of CRUD', '/customers'),
                         new Program('Sample of Dashboard', '/dashboard')
                     ])
                 );

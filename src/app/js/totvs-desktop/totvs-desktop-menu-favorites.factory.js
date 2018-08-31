@@ -57,7 +57,6 @@
             favorites = [];
 
         favorites.push(
-            new Favorite('Sample of CRUD', '/customers'),
             new Favorite('Sample of Dashboard', '/dashboard'),
             new Favorite('Pedidos de Compra', '/purchaseorders')
         );

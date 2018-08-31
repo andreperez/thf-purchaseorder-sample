@@ -28,7 +28,6 @@
             'totvsHtmlFramework',
             'totvsDesktop',
             'dashboard',
-            'customer',
             'purchaseorder'
         ]);
 
