@@ -90,7 +90,7 @@ Qualquer alteração salva no código-fonte é visualizada imediatamente no brow
 - [Gulp Web Server][4]
 - [JSHint][7]
 
-[1]: [https://github.com/totvs/generator-totvs-dev]
+[1]: https://github.com/totvs/generator-totvs-dev
 [2]: https://nodejs.org/en/
 [3]: https://github.com/gulpjs/gulp
 [4]: https://github.com/schickling/gulp-webserver
